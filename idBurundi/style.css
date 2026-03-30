@@ -1,0 +1,200 @@
+:root {
+      --blue-deep:   #1a3a5c;
+      --blue-mid:    #2563a8;
+      --blue-light:  #dce8f5;
+      --blue-card:   #a8c8e8;
+      --gold:        #c9922a;
+      --gold-light:  #f0d080;
+      --white:       #ffffff;
+      --text-dark:   #0f1e2e;
+      --text-muted:  #4a6280;
+      --border:      #8aadd0;
+      --input-bg:    #f4f8fd;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: linear-gradient(135deg, #0d2440 0%, #1a4a7a 50%, #0d2440 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 1px, transparent 0, transparent 50%);
+      background-size: 30px 30px;
+      pointer-events: none;
+    }
+
+    .page-wrapper { width: 100%; max-width: 760px; }
+
+    .republic-header { text-align: center; margin-bottom: 32px; }
+    .republic-header .flag-strip { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
+    .republic-header .flag-strip span { display: inline-block; width: 32px; height: 8px; border-radius: 4px; }
+    .flag-red   { background: #ce1126; }
+    .flag-white { background: #ffffff; }
+    .flag-green { background: #1eb53a; }
+    .republic-header h1 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold-light); letter-spacing: 0.25em; text-transform: uppercase; }
+    .republic-header h2 { font-family: 'Playfair Display', serif; font-size: 1.85rem; font-weight: 600; color: #fff; margin-top: 4px; letter-spacing: 0.05em; }
+    .republic-header p  { color: var(--blue-card); font-size: 0.85rem; letter-spacing: 0.12em; margin-top: 6px; }
+
+    .card { background: var(--white); border-radius: 16px; box-shadow: 0 24px 80px rgba(0,0,20,0.5), 0 0 0 1px rgba(255,255,255,0.08); overflow: hidden; }
+    .card-stripe { background: linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 60%, var(--gold) 100%); height: 8px; }
+    .card-body { padding: 40px 48px 48px; }
+
+    .section-title { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .section-title::before { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border)); }
+    .section-title::after  { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+    .section-title span { font-family: 'Playfair Display', serif; font-size: 0.75rem; font-weight: 600; color: var(--blue-mid); letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
+
+    /* ── PHOTO BOX ── */
+    .photo-section { display: flex; justify-content: center; margin-bottom: 36px; }
+
+    .photo-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+    .photo-box {
+      width: 110px;
+      height: 140px;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      background: var(--blue-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .photo-box:hover { border-color: var(--blue-mid); background: #cddff2; }
+
+    /* L'input file couvre toute la boîte */
+    .photo-box input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    /* Placeholder (icône + texte) */
+    .photo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+    .photo-placeholder svg { width: 32px; height: 32px; color: var(--blue-mid); }
+    .photo-placeholder p   { font-size: 0.68rem; color: var(--text-muted); text-align: center; line-height: 1.4; padding: 0 8px; }
+
+    /* Aperçu image — caché par défaut */
+    #photo-preview {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      display: none;        /* affiché par JS quand une image est choisie */
+      z-index: 1;
+    }
+
+    /* Badge "changer" qui apparaît au survol quand photo chargée */
+    .photo-change-hint {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(26,58,92,0.75);
+      color: #fff;
+      font-size: 0.6rem;
+      text-align: center;
+      padding: 4px 0;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 3;
+      pointer-events: none;
+      letter-spacing: 0.06em;
+    }
+    .photo-box:hover .photo-change-hint { opacity: 1; }
+
+    .photo-label { font-size: 0.7rem; color: var(--text-muted); text-align: center; letter-spacing: 0.08em; }
+
+    /* ── GRILLE & CHAMPS ── */
+    .grid   { display: grid; gap: 20px; }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    label { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; }
+    .label-bi { font-size: 0.62rem; color: var(--blue-mid); font-style: italic; font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+    input[type="text"],
+    input[type="date"],
+    select {
+      height: 44px; padding: 0 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: var(--input-bg);
+      font-family: 'Source Sans 3', sans-serif; font-size: 0.95rem; color: var(--text-dark);
+      transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%;
+    }
+    input:focus, select:focus {
+      border-color: var(--blue-mid);
+      box-shadow: 0 0 0 3px rgba(37,99,168,0.12);
+      background: #fff;
+    }
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232563a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px;
+    }
+    .mifp-field input { font-family: 'Playfair Display', serif; font-size: 1rem; letter-spacing: 0.12em; color: var(--blue-deep); }
+
+    .divider { border: none; border-top: 1px solid var(--blue-light); margin: 32px 0; }
+
+    .submit-row { display: flex; justify-content: flex-end; gap: 12px; margin-top: 36px; }
+
+    button[type="reset"] {
+      height: 48px; padding: 0 28px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: transparent; color: var(--text-muted);
+      font-family: 'Source Sans 3', sans-serif; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; letter-spacing: 0.06em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    button[type="reset"]:hover { border-color: var(--blue-mid); color: var(--blue-mid); }
+
+    button[type="submit"] {
+      height: 48px; padding: 0 36px;
+      border: none; border-radius: 8px;
+      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+      color: #fff; font-family: 'Source Sans 3', sans-serif; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; letter-spacing: 0.08em; text-transform: uppercase;
+      box-shadow: 0 4px 16px rgba(37,99,168,0.35);
+      transition: box-shadow 0.2s, transform 0.1s;
+    }
+    button[type="submit"]:hover { box-shadow: 0 6px 24px rgba(37,99,168,0.5); transform: translateY(-1px); }
+    button[type="submit"]:active { transform: translateY(0); }
+
+    .card-footer { background: var(--blue-light); padding: 14px 48px; display: flex; align-items: center; justify-content: space-between; }
+    .card-footer p { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.06em; }
+    .card-footer .seal { width: 36px; height: 36px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .card-footer .seal svg { width: 18px; height: 18px; color: var(--blue-mid); }
+
+    @media (max-width: 640px) {
+      .card-body { padding: 28px 20px 36px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .card-footer { padding: 14px 20px; }
+      .republic-header h2 { font-size: 1.4rem; }
+    }
