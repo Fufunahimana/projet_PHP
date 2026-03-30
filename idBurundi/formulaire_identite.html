@@ -6,9 +6,6 @@
   <title>Ikarata Karangamuntu – Formulaire d'Enregistrement</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
-  
-  
 </head>
 <body>
 
@@ -27,34 +24,30 @@
     <p>Formulaire d'Enregistrement d'Identité</p>
   </header>
 
+  <!-- ── NOTIFICATION TOAST ── -->
+  <div id="toast" class="toast hidden"></div>
+
   <div class="card">
     <div class="card-stripe"></div>
 
     <div class="card-body">
-      <form action="enregistrement.php" method="POST" enctype="multipart/form-data">
+      <!-- id="identiteForm" — soumission gérée par JS via fetch() -->
+      <form id="identiteForm" enctype="multipart/form-data" novalidate>
 
         <!-- ── PHOTO ── -->
         <div class="photo-section">
           <div class="photo-wrapper">
             <div class="photo-box" id="photoBox">
-
-              <!-- Aperçu (caché jusqu'au choix d'une image) -->
               <img id="photo-preview" src="" alt="Aperçu photo">
-
-              <!-- Placeholder affiché par défaut -->
               <div class="photo-placeholder" id="photoPlaceholder">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
                 </svg>
                 <p>Cliquer pour ajouter la photo</p>
               </div>
-
-              <!-- Hint "Changer" au survol quand photo chargée -->
               <span class="photo-change-hint" id="photoHint">✎ Changer</span>
-
-              <!-- Input file — couvre toute la zone cliquable -->
-              <input type="file" name="photo" id="photoInput" accept="image/*"
-                     onchange="afficherApercu(this)">
+              <input type="file" name="photo" id="photoInput" accept="image/*">
             </div>
             <p class="photo-label">IGIKUMU CA NYENEYO</p>
           </div>
@@ -100,11 +93,11 @@
           </div>
           <div class="field">
             <label>Nom de la Mère <span class="label-bi">/ Nyina</span></label>
-            <input type="text" name="nom_mere" placeholder="Niyonkuru Emelyne" required>
+            <input type="text" name="nom_mere" placeholder="Niyonkuru Emelyne">
           </div>
           <div class="field">
             <label>Nom du Père <span class="label-bi">/ Se</span></label>
-            <input type="text" name="nom_pere" placeholder="Niyonkuru Elias" required>
+            <input type="text" name="nom_pere" placeholder="Niyonkuru Elias">
           </div>
           <div class="field">
             <label>État Civil <span class="label-bi">/ Arubatse</span></label>
@@ -159,13 +152,17 @@
           </div>
           <div class="field">
             <label>Officier d'État Civil <span class="label-bi">/ Uwuyitanze</span></label>
-            <input type="text" name="officier_etat_civil" placeholder="Karimanzira Jean" required>
+            <input type="text" name="officier_etat_civil" placeholder="Karimanzira Jean">
           </div>
         </div>
 
+        <!-- ── BOUTONS ── -->
         <div class="submit-row">
-          <button type="reset" onclick="reinitialiserPhoto()">Effacer</button>
-          <button type="submit">Enregistrer la Carte</button>
+          <button type="button" id="btnReset">Effacer</button>
+          <button type="submit" id="btnSubmit">
+            <span id="btnText">Enregistrer la Carte</span>
+            <span id="btnSpinner" class="spinner hidden"></span>
+          </button>
         </div>
 
       </form>
@@ -175,47 +172,125 @@
       <p>Republika y'Uburundi — Données officielles</p>
       <div class="seal">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
         </svg>
       </div>
     </div>
   </div>
 
-</div>
+</div><!-- /page-wrapper -->
 
-<!-- Script minimal uniquement pour l'aperçu de la photo -->
 <script>
-  function afficherApercu(input) {
-    var preview     = document.getElementById('photo-preview');
-    var placeholder = document.getElementById('photoPlaceholder');
-    var hint        = document.getElementById('photoHint');
-    var box         = document.getElementById('photoBox');
+/* ═══════════════════════════════════════════════════════════
+   APERÇU PHOTO
+═══════════════════════════════════════════════════════════ */
+const photoInput = document.getElementById('photoInput');
+const preview    = document.getElementById('photo-preview');
+const placeholder= document.getElementById('photoPlaceholder');
+const hint       = document.getElementById('photoHint');
+const box        = document.getElementById('photoBox');
 
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        preview.src           = e.target.result;
-        preview.style.display = 'block';
-        placeholder.style.display = 'none';
-        hint.style.display    = 'block';
-        box.style.border      = '2px solid #2563a8';
-      };
-      reader.readAsDataURL(input.files[0]);
+photoInput.addEventListener('change', function () {
+  if (this.files && this.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      preview.src               = e.target.result;
+      preview.style.display     = 'block';
+      placeholder.style.display = 'none';
+      hint.style.display        = 'block';
+      box.style.border          = '2px solid #2563a8';
+    };
+    reader.readAsDataURL(this.files[0]);
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════════════════════ */
+document.getElementById('btnReset').addEventListener('click', function () {
+  document.getElementById('identiteForm').reset();
+  preview.src               = '';
+  preview.style.display     = 'none';
+  placeholder.style.display = 'flex';
+  hint.style.display        = 'none';
+  box.style.border          = '2px dashed #8aadd0';
+  hideToast();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST (notification)
+═══════════════════════════════════════════════════════════ */
+const toast = document.getElementById('toast');
+let toastTimer;
+
+function showToast(msg, type) {         // type = 'success' | 'error'
+  clearTimeout(toastTimer);
+  toast.textContent = msg;
+  toast.className   = 'toast ' + type;
+  toastTimer = setTimeout(hideToast, 6000);
+}
+function hideToast() {
+  toast.className = 'toast hidden';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SOUMISSION AJAX — évite le rechargement et le 405
+═══════════════════════════════════════════════════════════ */
+document.getElementById('identiteForm').addEventListener('submit', async function (e) {
+  e.preventDefault();                   // ← empêche la navigation (pas de 405)
+
+  const btnSubmit  = document.getElementById('btnSubmit');
+  const btnText    = document.getElementById('btnText');
+  const btnSpinner = document.getElementById('btnSpinner');
+
+  // État chargement
+  btnSubmit.disabled       = true;
+  btnText.textContent      = 'Envoi en cours…';
+  btnSpinner.classList.remove('hidden');
+
+  try {
+    // FormData récupère tous les champs + le fichier photo automatiquement
+    const formData = new FormData(this);
+
+    const response = await fetch('enregistrement.php', {
+      method : 'POST',
+      body   : formData
+      // Ne pas mettre Content-Type : fetch le gère tout seul pour FormData
+    });
+
+    const text = await response.text();
+
+    // enregistrement.php renvoie du JSON quand appelé en AJAX
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch (_) {
+      throw new Error('Réponse inattendue du serveur.');
     }
-  }
 
-  function reinitialiserPhoto() {
-    var preview     = document.getElementById('photo-preview');
-    var placeholder = document.getElementById('photoPlaceholder');
-    var hint        = document.getElementById('photoHint');
-    var box         = document.getElementById('photoBox');
+    if (result.success) {
+      showToast('✅ Carte enregistrée avec succès ! (ID #' + result.id + ')', 'success');
+      this.reset();
+      // Réinitialiser la photo
+      preview.src               = '';
+      preview.style.display     = 'none';
+      placeholder.style.display = 'flex';
+      hint.style.display        = 'none';
+      box.style.border          = '2px dashed #8aadd0';
+    } else {
+      const msgs = Array.isArray(result.errors) ? result.errors.join('\n• ') : result.message;
+      showToast('❌ ' + msgs, 'error');
+    }
 
-    preview.src           = '';
-    preview.style.display = 'none';
-    placeholder.style.display = 'flex';
-    hint.style.display    = 'none';
-    box.style.border      = '2px dashed #8aadd0';
+  } catch (err) {
+    showToast('❌ Erreur réseau : ' + err.message, 'error');
+  } finally {
+    btnSubmit.disabled       = false;
+    btnText.textContent      = 'Enregistrer la Carte';
+    btnSpinner.classList.add('hidden');
   }
+});
 </script>
 
 </body>
