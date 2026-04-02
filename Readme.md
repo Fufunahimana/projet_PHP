@@ -5,3 +5,5 @@ membres du groupe
 4. NDAYISABA Andy Clarky
 
    ![image dans la Base des données après execution du code](https://github.com/Fufunahimana/projet_PHP/blob/main/DATABASEresults.JPG)
+
+    ![image de la page Admin pour administration de la Base des données](https://github.com/Fufunahimana/projet_PHP/blob/main/adminpage.JPG)
