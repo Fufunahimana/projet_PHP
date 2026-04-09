@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enregistrement — Carte d'Identité Burundaise</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="bg-pattern"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-block">
+        <div class="flag-bar">
+          <span class="f1"></span><span class="f2"></span><span class="f3"></span>
+        </div>
+        <div class="header-text">
+          <span class="republic">REPUBLIKA Y'UBURUNDI</span>
+          <span class="ministry">Ministère de l'Intérieur — Système d'Identification</span>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <a href="identite.html" class="nav-link active">Enregistrement</a>
+        <a href="admin.php" class="nav-link admin-link">⚙ Administration</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <div class="form-card">
+      <div class="card-header">
+        <h1>IKARATA KARANGAMUNTU</h1>
+        <p class="card-subtitle">Formulaire d'Enregistrement de Carte d'Identité Nationale</p>
+      </div>
+
+      <div id="alert-box" class="alert hidden"></div>
+
+      <form id="identiteForm" action="enregistrement.php" method="POST" enctype="multipart/form-data" novalidate>
+
+        <!-- ══════════════════════════════════════
+             SECTION 01 — Identité Personnelle
+        ══════════════════════════════════════ -->
+        <fieldset class="form-section">
+          <legend><span class="section-num">01</span> Identité Personnelle</legend>
+          <div class="grid-2">
+            <div class="field-group">
+              <label for="izina">IZINA (Nom) <span class="req">*</span></label>
+              <input type="text" id="izina" name="izina" placeholder="ex: NINKUNDA" required>
+              <span class="field-error" id="err-izina"></span>
+            </div>
+            <div class="field-group">
+              <label for="amatazirano">AMATAZIRANO (Prénom) <span class="req">*</span></label>
+              <input type="text" id="amatazirano" name="amatazirano" placeholder="ex: Josiane" required>
+              <span class="field-error" id="err-amatazirano"></span>
+            </div>
+            <div class="field-group">
+              <label for="se">SE (Père) <span class="req">*</span></label>
+              <input type="text" id="se" name="se" placeholder="Nom du père" required>
+              <span class="field-error" id="err-se"></span>
+            </div>
+            <div class="field-group">
+              <label for="nyina">NYINA (Mère) <span class="req">*</span></label>
+              <input type="text" id="nyina" name="nyina" placeholder="Nom de la mère" required>
+              <span class="field-error" id="err-nyina"></span>
+            </div>
+            <!-- ── Téléphone ── -->
+            <div class="field-group">
+              <label for="telephone">Numéro de Téléphone</label>
+              <div class="phone-input-wrap">
+                <span class="phone-prefix">+257</span>
+                <input type="tel" id="telephone" name="telephone"
+                       placeholder="79 123 456"
+                       maxlength="11"
+                       autocomplete="tel">
+              </div>
+              <span class="field-error" id="err-telephone"></span>
+              <span class="field-hint">Format Burundi : +257 XX XXX XXX (optionnel)</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ══════════════════════════════════════
+             SECTION 02 — Origine & Naissance
+        ══════════════════════════════════════ -->
+        <fieldset class="form-section">
+          <legend><span class="section-num">02</span> Origine & Naissance</legend>
+          <div class="grid-3">
+            <div class="field-group">
+              <label for="provensi">PROVENSI (Province) <span class="req">*</span></label>
+              <select id="provensi" name="provensi" required>
+                <option value="">-- Sélectionner --</option>
+                <option>BUHUMUZA</option><option>BUJUMBURA</option><option>BURUNGA</option>
+                <option>BUTANYERERA</option><option>GITEGA</option>
+              </select>
+              <span class="field-error" id="err-provensi"></span>
+            </div>
+            <div class="field-group">
+              <label for="komine">KOMINE (Commune) <span class="req">*</span></label>
+              <input type="text" id="komine" name="komine" placeholder="ex: Muhuta" required>
+              <span class="field-error" id="err-komine"></span>
+            </div>
+            <div class="field-group">
+              <label for="yavukiye">YAVUKIYE (Né à) <span class="req">*</span></label>
+              <input type="text" id="yavukiye" name="yavukiye" placeholder="ex: Nkuba" required>
+              <span class="field-error" id="err-yavukiye"></span>
+            </div>
+
+            <!-- ── Date de naissance : min=1920-01-01, max=aujourd'hui ── -->
+            <div class="field-group">
+              <label for="italiki">ITALIKI (Date de naissance) <span class="req">*</span></label>
+              <input type="date" id="italiki" name="italiki"
+                     min="1920-01-01" required>
+              <span class="field-error" id="err-italiki"></span>
+              <span class="field-hint">Entre le 01/01/1920 et aujourd'hui</span>
+            </div>
+            <div class="field-group">
+              <label for="genre">Genre <span class="req">*</span></label>
+              <select id="genre" name="genre" required>
+                <option value="">-- Genre --</option>
+                <option value="M">Masculin</option>
+                <option value="F">Féminin</option>
+              </select>
+              <span class="field-error" id="err-genre"></span>
+            </div>
+            <div class="field-group">
+              <label for="arubatse">ARUBATSE (État civil)</label>
+              <select id="arubatse" name="arubatse">
+                <option value="-">-- État civil --</option>
+                <option value="célibataire">Célibataire</option>
+                <option value="marié(e)">Marié(e)</option>
+                <option value="divorcé(e)">Divorcé(e)</option>
+                <option value="veuf/veuve">Veuf/Veuve</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ══════════════════════════════════════
+             SECTION 03 — Profession & Identification
+        ══════════════════════════════════════ -->
+        <fieldset class="form-section">
+          <legend><span class="section-num">03</span> Profession & Identification</legend>
+          <div class="grid-2">
+            <div class="field-group">
+              <label for="ntarubaka">NTARUBAKA</label>
+              <input type="text" id="ntarubaka" name="ntarubaka" placeholder="ex: Élève, Commerçant...">
+            </div>
+            <div class="field-group">
+              <label for="akazi_akora">AKAZI AKORA (Employeur)</label>
+              <input type="text" id="akazi_akora" name="akazi_akora" placeholder="Lieu de travail">
+            </div>
+
+            <!-- ── N° MIFP — unicité vérifiée en temps réel ── -->
+            <div class="field-group">
+              <label for="num_mifp">N° MIFP <span class="req">*</span></label>
+              <div class="mifp-wrap">
+                <input type="text" id="num_mifp" name="num_mifp"
+                       placeholder="ex: 1504/111.147" required autocomplete="off">
+                <span class="mifp-status" id="mifp-status" title="Vérification unicité"></span>
+              </div>
+              <span class="field-error" id="err-num_mifp"></span>
+              <span class="field-hint">Numéro unique — vérifié en temps réel</span>
+            </div>
+            <div class="field-group">
+              <label for="itangiwe_i">ITANGIWE I (Délivrée à)</label>
+              <input type="text" id="itangiwe_i" name="itangiwe_i" placeholder="Lieu de délivrance">
+            </div>
+
+            <!-- ── Date de délivrance : max=aujourd'hui ── -->
+            <div class="field-group">
+              <label for="date_delivrance">Date de délivrance</label>
+              <input type="date" id="date_delivrance" name="date_delivrance">
+              <span class="field-error" id="err-date_delivrance"></span>
+              <span class="field-hint">Ne peut pas être dans le futur</span>
+            </div>
+            <div class="field-group">
+              <label for="uwuyitanze">UWUYITANZE (Signataire)</label>
+              <input type="text" id="uwuyitanze" name="uwuyitanze" placeholder="Nom du signataire">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ══════════════════════════════════════
+             SECTION 04 — Photo d'Identité
+        ══════════════════════════════════════ -->
+        <fieldset class="form-section">
+          <legend><span class="section-num">04</span> Photo d'Identité</legend>
+          <div class="photo-upload-zone">
+            <div class="photo-preview-wrap">
+              <div id="photo-preview" class="photo-placeholder">
+                <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="30" cy="22" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 52c0-12.15 9.85-22 22-22s22 9.85 22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Aucune photo</span>
+              </div>
+            </div>
+            <div class="upload-controls">
+              <label class="upload-btn" for="photo">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                Choisir une photo
+              </label>
+              <input type="file" id="photo" name="photo" accept="image/*" class="hidden-input">
+              <p class="upload-hint">Format JPG, PNG — Max 5 Mo<br>Fond rouge de préférence</p>
+              <button type="button" id="clear-photo" class="clear-btn hidden">✕ Supprimer la photo</button>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="resetForm()">Réinitialiser</button>
+          <button type="submit" class="btn-primary" id="submit-btn">
+            <span>Enregistrer la Carte</span>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M17 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 Republika y'Uburundi — Système National d'Identification</p>
+  </footer>
+
+  <script>
+  // ═══════════════════════════════════════════════════
+  //  HELPERS
+  // ═══════════════════════════════════════════════════
+  const todayStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+  // Fixer le max dynamique dès le chargement
+  document.getElementById('italiki').max         = todayStr;
+  document.getElementById('date_delivrance').max = todayStr;
+
+  function setError(id, msg) {
+    const errEl   = document.getElementById('err-' + id);
+    const inputEl = document.getElementById(id);
+    if (errEl)   errEl.textContent = msg;
+    if (inputEl) inputEl.classList.toggle('input-error', !!msg);
+  }
+  function clearError(id) { setError(id, ''); }
+
+  function showAlert(msg, type = 'success') {
+    const box = document.getElementById('alert-box');
+    box.textContent = msg;
+    box.className = `alert ${type}`;
+    box.classList.remove('hidden');
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => box.classList.add('hidden'), 6000);
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  VALIDATION DATE DE NAISSANCE
+  //  Règles : >= 1920-01-01 ET <= aujourd'hui
+  // ═══════════════════════════════════════════════════
+  document.getElementById('italiki').addEventListener('change', validateDOB);
+  function validateDOB() {
+    clearError('italiki');
+    const val = document.getElementById('italiki').value;
+    if (!val) return true;
+    const d   = new Date(val + 'T00:00:00');
+    const min = new Date('1920-01-01T00:00:00');
+    const max = new Date(); max.setHours(23, 59, 59);
+    if (d < min) {
+      setError('italiki', '❌ La date de naissance ne peut pas être avant le 01/01/1920.');
+      document.getElementById('italiki').value = '';
+      return false;
+    }
+    if (d > max) {
+      setError('italiki', '❌ La date de naissance ne peut pas être dans le futur.');
+      document.getElementById('italiki').value = '';
+      return false;
+    }
+    return true;
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  VALIDATION DATE DE DÉLIVRANCE
+  //  Règle : <= aujourd'hui (pas de date future)
+  // ═══════════════════════════════════════════════════
+  document.getElementById('date_delivrance').addEventListener('change', validateDelivrance);
+  function validateDelivrance() {
+    clearError('date_delivrance');
+    const val = document.getElementById('date_delivrance').value;
+    if (!val) return true;
+    const d   = new Date(val + 'T00:00:00');
+    const max = new Date(); max.setHours(23, 59, 59);
+    if (d > max) {
+      setError('date_delivrance', '❌ La date de délivrance ne peut pas être dans le futur.');
+      document.getElementById('date_delivrance').value = '';
+      return false;
+    }
+    return true;
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  VALIDATION TÉLÉPHONE
+  //  Format Burundi : 7 à 9 chiffres après +257
+  // ═══════════════════════════════════════════════════
+  document.getElementById('telephone').addEventListener('input', function () {
+    clearError('telephone');
+    // Nettoyer : garder uniquement chiffres et espaces
+    this.value = this.value.replace(/[^\d\s]/g, '');
+    const digits = this.value.replace(/\s/g, '');
+    if (digits.length > 0 && digits.length < 7) {
+      setError('telephone', '⚠ Numéro trop court — minimum 7 chiffres attendus.');
+    } else if (digits.length > 9) {
+      setError('telephone', '⚠ Numéro trop long — maximum 9 chiffres (hors +257).');
+      this.value = this.value.slice(0, -1);
+    }
+  });
+
+  function validateTelephone() {
+    clearError('telephone');
+    const digits = document.getElementById('telephone').value.replace(/\s/g, '');
+    if (digits.length === 0) return true; // optionnel
+    if (digits.length < 7 || digits.length > 9) {
+      setError('telephone', '❌ Numéro invalide — 7 à 9 chiffres attendus (hors indicatif +257).');
+      return false;
+    }
+    return true;
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  VÉRIFICATION UNICITÉ N° MIFP (AJAX — debounce 500ms)
+  // ═══════════════════════════════════════════════════
+  let mifpTimer = null;
+  let mifpValid = true;
+  let mifpChecking = false;
+
+  document.getElementById('num_mifp').addEventListener('input', function () {
+    clearError('num_mifp');
+    const status = document.getElementById('mifp-status');
+    const val    = this.value.trim();
+
+    if (!val) {
+      status.textContent = '';
+      status.className   = 'mifp-status';
+      mifpValid          = true;
+      return;
+    }
+
+    status.textContent = '⏳';
+    status.className   = 'mifp-status checking';
+    mifpChecking       = true;
+    clearTimeout(mifpTimer);
+
+    mifpTimer = setTimeout(() => {
+      fetch(`check_mifp.php?num_mifp=${encodeURIComponent(val)}`)
+        .then(r => r.json())
+        .then(data => {
+          mifpChecking = false;
+          if (data.exists) {
+            setError('num_mifp', '❌ Ce N° MIFP est déjà enregistré dans le système.');
+            status.textContent = '✗';
+            status.className   = 'mifp-status taken';
+            mifpValid          = false;
+          } else {
+            clearError('num_mifp');
+            status.textContent = '✓';
+            status.className   = 'mifp-status available';
+            mifpValid          = true;
+          }
+        })
+        .catch(() => {
+          // Serveur inaccessible : on laisse passer, la BD bloquera les doublons
+          mifpChecking       = false;
+          status.textContent = '';
+          status.className   = 'mifp-status';
+          mifpValid          = true;
+        });
+    }, 500);
+  });
+
+  // ═══════════════════════════════════════════════════
+  //  SOUMISSION — VALIDATION COMPLÈTE CÔTÉ CLIENT
+  // ═══════════════════════════════════════════════════
+  document.getElementById('identiteForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    let hasError = false;
+
+    // 1. Champs obligatoires
+    [
+      { id: 'izina',       label: 'Le Nom (IZINA)' },
+      { id: 'amatazirano', label: 'Le Prénom (AMATAZIRANO)' },
+      { id: 'se',          label: 'Le nom du père (SE)' },
+      { id: 'nyina',       label: 'Le nom de la mère (NYINA)' },
+      { id: 'provensi',    label: 'La Province (PROVENSI)' },
+      { id: 'komine',      label: 'La Commune (KOMINE)' },
+      { id: 'yavukiye',    label: 'Le lieu de naissance (YAVUKIYE)' },
+      { id: 'italiki',     label: 'La date de naissance (ITALIKI)' },
+      { id: 'genre',       label: 'Le genre' },
+      { id: 'num_mifp',    label: 'Le N° MIFP' },
+    ].forEach(({ id, label }) => {
+      if (!document.getElementById(id).value.trim()) {
+        setError(id, `❌ ${label} est obligatoire.`);
+        hasError = true;
+      }
+    });
+
+    // 2. Date de naissance
+    if (!validateDOB())       hasError = true;
+
+    // 3. Date de délivrance
+    if (!validateDelivrance()) hasError = true;
+
+    // 4. Téléphone
+    if (!validateTelephone()) hasError = true;
+
+    // 5. N° MIFP — unicité
+    if (!mifpValid) {
+      setError('num_mifp', '❌ Ce N° MIFP est déjà enregistré dans le système.');
+      hasError = true;
+    }
+    if (mifpChecking) {
+      showAlert('⏳ Vérification du N° MIFP en cours... veuillez patienter.', 'error');
+      return;
+    }
+
+    if (hasError) {
+      showAlert('⚠ Veuillez corriger les erreurs indiquées avant de soumettre.', 'error');
+      const firstErr = document.querySelector('.input-error');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Tout OK → soumettre
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>Enregistrement en cours...</span> ⏳';
+    this.submit();
+  });
+
+  // ═══════════════════════════════════════════════════
+  //  PHOTO PREVIEW
+  // ═══════════════════════════════════════════════════
+  const photoInput  = document.getElementById('photo');
+  const photoPreview = document.getElementById('photo-preview');
+  const clearBtn    = document.getElementById('clear-photo');
+
+  photoInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      showAlert('❌ La photo ne doit pas dépasser 5 Mo.', 'error');
+      this.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+      photoPreview.innerHTML = `<img src="${e.target.result}" alt="Aperçu photo">`;
+      clearBtn.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  clearBtn.addEventListener('click', function () {
+    photoInput.value = '';
+    photoPreview.innerHTML = svgPlaceholder();
+    this.classList.add('hidden');
+  });
+
+  function svgPlaceholder() {
+    return `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="22" r="10" stroke="currentColor" stroke-width="2"/>
+      <path d="M8 52c0-12.15 9.85-22 22-22s22 9.85 22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg><span>Aucune photo</span>`;
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  URL PARAMS (retour après soumission)
+  // ═══════════════════════════════════════════════════
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('success')) showAlert('✔ Enregistrement réussi avec succès !', 'success');
+  if (params.get('error'))   showAlert('✘ Erreur : ' + decodeURIComponent(params.get('error')), 'error');
+
+  // ═══════════════════════════════════════════════════
+  //  RESET
+  // ═══════════════════════════════════════════════════
+  function resetForm() {
+    document.getElementById('identiteForm').reset();
+    photoPreview.innerHTML = svgPlaceholder();
+    clearBtn.classList.add('hidden');
+    document.getElementById('mifp-status').textContent = '';
+    document.getElementById('mifp-status').className = 'mifp-status';
+    document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+    document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    mifpValid    = true;
+    mifpChecking = false;
+  }
+  </script>
+</body>
+</html>
